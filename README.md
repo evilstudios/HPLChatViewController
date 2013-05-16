@@ -8,7 +8,7 @@ HPLChatViewController is a component for making sms like screens on iOS. It is a
 
 ### Cocoapods
 
-```sh
+```ruby
 pod 'HPLChatViewController', '~> 0.0.1'
 ```
 
@@ -22,7 +22,7 @@ TODO: Improve this Section
 
 The project was created by [Alex Barinov](https://github.com/AlexBarinov/), maintained by
 
-[Matthew Conlen](http://www.mathisonian.com).
+* [Matthew Conlen](http://www.github.com/mathisonian) mc@mathisonian.com
 
 ## License
 
