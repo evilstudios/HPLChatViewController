@@ -28,6 +28,7 @@
 @synthesize chatImage = _chatImage;
 @synthesize showAvatar = _showAvatar;
 @synthesize avatarImage = _avatarImage;
+@synthesize showBubble = _showBubble;
 
 - (void)setFrame:(CGRect)frame
 {
@@ -56,7 +57,7 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    if (!self.chatImage)
+    if (self.showBubble && !self.chatImage)
     {
 #if !__has_feature(objc_arc)
         self.chatImage = [[[UIImageView alloc] init] autorelease];
@@ -106,16 +107,18 @@
     self.customView.frame = CGRectMake(x + self.data.insets.left, y + self.data.insets.top, width, height);
     [self.contentView addSubview:self.customView];
 
-    if (type == ChatTypeSomeoneElse)
-    {
-        self.chatImage.image = [[UIImage imageNamed:@"chatSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+    if (self.showBubble) {
+        if (type == ChatTypeSomeoneElse)
+        {
+            self.chatImage.image = [[UIImage imageNamed:@"chatSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
 
-    }
-    else {
-        self.chatImage.image = [[UIImage imageNamed:@"chatMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-    }
+        }
+        else {
+            self.chatImage.image = [[UIImage imageNamed:@"chatMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
+        }
 
-    self.chatImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
+        self.chatImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
+    }
 }
 
 @end
