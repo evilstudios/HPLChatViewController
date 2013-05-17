@@ -25,7 +25,7 @@
 @synthesize chatSection = _chatSection;
 @synthesize typingChat = _typingChat;
 @synthesize showAvatars = _showAvatars;
-@synthesize showBubble = _showBubbles;
+@synthesize showBubbles = _showBubbles;
 
 #pragma mark - Initializators
 
