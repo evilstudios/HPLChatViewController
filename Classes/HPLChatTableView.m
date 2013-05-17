@@ -26,6 +26,8 @@
 @synthesize typingChat = _typingChat;
 @synthesize showAvatars = _showAvatars;
 @synthesize showBubble = _showBubbles;
+@synthesize chatHeaderViewCellClass = _chatHeaderViewCellClass;
+@synthesize chatViewCellClass = _chatViewCellClass;
 
 #pragma mark - Initializators
 
@@ -39,11 +41,15 @@
     
     self.delegate = self;
     self.dataSource = self;
-    
+
     // HPLChatTableView default properties
     
     self.snapInterval = 120;
     self.typingChat = HPLChatTypingTypeNobody;
+
+    self.chatViewCellClass = [HPLChatTableViewCell class];
+    self.chatHeaderViewCellClass = [HPLChatHeaderTableViewCell class];
+
 }
 
 - (id)init
@@ -225,10 +231,12 @@
     if (indexPath.row == 0)
     {
         static NSString *cellId = @"tblChatHeaderCell";
-        HPLChatHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        self.chatHeaderViewCellClass *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         HPLChatData *data = [[self.chatSection objectAtIndex:indexPath.section] objectAtIndex:0];
         
-        if (cell == nil) cell = [[HPLChatHeaderTableViewCell alloc] init];
+        if (cell == nil) {
+            cell = [[self.chatViewCellClass alloc] init];
+        }
 
         cell.date = data.date;
        
@@ -237,10 +245,12 @@
     
     // Standard chat    
     static NSString *cellId = @"tblChatCell";
-    HPLChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    self.chatViewCellClass *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     HPLChatData *data = [[self.chatSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
     
-    if (cell == nil) cell = [[HPLChatTableViewCell alloc] init];
+    if (cell == nil) {
+        cell = [[self.chatViewCellClass alloc] init];
+    }
     
     cell.data = data;
     cell.showAvatar = self.showAvatars;

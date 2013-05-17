@@ -27,6 +27,9 @@ typedef enum _HPLChatTypingType
 @property (nonatomic) BOOL showAvatars;
 @property (nonatomic) BOOL showBubbles;
 @property (nonatomic) BOOL scrollOnActivity;
+@property (nonatomic) class chatViewCellClass;
+@property (nonatomic) class chatHeaderViewCellClass;
+
 -(void)scrollToBottomAnimated:(BOOL)animated;
 
 @end
