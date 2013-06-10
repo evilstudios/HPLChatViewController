@@ -19,6 +19,7 @@
 @synthesize view = _view;
 @synthesize insets = _insets;
 @synthesize avatar = _avatar;
+@synthesize statusView = _statusView;
 
 #pragma mark - Lifecycle
 
@@ -135,5 +136,89 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     }
     return self;
 }
+
+
+- (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:UILineBreakModeWordWrap];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    label.numberOfLines = 0;
+    label.lineBreakMode = UILineBreakModeWordWrap;
+    label.text = (text ? text : @"");
+    label.font = font;
+    label.backgroundColor = [UIColor clearColor];
+
+#if !__has_feature(objc_arc)
+    [label autorelease];
+#endif
+
+    UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
+
+    UIView *statusView;
+    if (type == ChatTypeMine) {
+        statusView = [[UIView alloc] initWithFrame:CGRectZero];
+        statusView.backgroundColor = [UIColor clearColor];
+
+        switch (messageStatus) {
+            case 0: {
+                UIActivityIndicatorView *msgSendingStatus = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+                msgSendingStatus.frame = CGRectMake(1.0f, 1.0f, 18.0f, 18.0f);
+                [msgSendingStatus startAnimating];
+                [statusView addSubview:msgSendingStatus];
+            }
+                break;
+
+            case 1: {
+                UIImageView *succedAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
+                succedAlert.image = [UIImage imageNamed:@"CheckMark.png"];
+                [statusView addSubview:succedAlert];
+            }
+                break;
+
+            case 2: {
+                UIImageView *errorAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
+                errorAlert.image = [UIImage imageNamed:@"symbol-error.png"];
+                [statusView addSubview:errorAlert];
+            }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return [self initWithView:label date:date type:type insets:insets status:statusView];
+}
+
++ (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
+#if !__has_feature(objc_arc)
+    return [[[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus] autorelease];
+#else
+    return [[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus]
+#endif
+}
+
+- (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatData*)type insets:(UIEdgeInsets)insets status:(UIView *)statusView
+{
+    self = [super init];
+    if (self)
+    {
+#if !__has_feature(objc_arc)
+        _view = [view retain];
+        _date = [date retain];
+        _statusView = [statusView retain];
+#else
+        _view = view;
+        _date = date;
+        _statusView = statusView;
+#endif
+        _type = type;
+        _insets = insets;
+    }
+    return self;
+}
+
+
 
 @end

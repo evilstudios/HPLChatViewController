@@ -9,11 +9,16 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum _HPLChatType
-{
+typedef enum _HPLChatType {
     ChatTypeMine = 0,
     ChatTypeSomeoneElse = 1
 } HPLChatType;
+
+typedef enum _HPLChatMessageStatus {
+    ChatStatusSending = 0,
+    ChatStatusSucceeded = 1,
+    ChatStatusFailed = 2
+} HPLChatMessageStatus;
 
 @interface HPLChatData : NSObject
 
@@ -22,6 +27,8 @@ typedef enum _HPLChatType
 @property (readonly, nonatomic, strong) UIView *view;
 @property (readonly, nonatomic) UIEdgeInsets insets;
 @property (nonatomic, strong) UIImage *avatar;
+@property (readonly, nonatomic, strong) UIView *statusView;
+@property (readonly, nonatomic) HPLChatMessageStatus messageStatus;
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
@@ -29,5 +36,7 @@ typedef enum _HPLChatType
 + (id)dataWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type;
 - (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets;
 + (id)dataWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets;
+- (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
++ (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
 
 @end
