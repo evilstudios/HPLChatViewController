@@ -156,37 +156,31 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
 
     UIView *statusView;
-    if (type == ChatTypeMine) {
+
         statusView = [[UIView alloc] initWithFrame:CGRectZero];
         statusView.backgroundColor = [UIColor clearColor];
 
         switch (messageStatus) {
-            case 0: {
-                UIActivityIndicatorView *msgSendingStatus = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            case ChatStatusSending: {
+                UIActivityIndicatorView *msgSendingStatus = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
                 msgSendingStatus.frame = CGRectMake(1.0f, 1.0f, 18.0f, 18.0f);
                 [msgSendingStatus startAnimating];
                 [statusView addSubview:msgSendingStatus];
             }
                 break;
 
-            case 1: {
-                UIImageView *succedAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
-                succedAlert.image = [UIImage imageNamed:@"CheckMark.png"];
-                [statusView addSubview:succedAlert];
-            }
-                break;
-
-            case 2: {
+            case ChatStatusFailed: {
                 UIImageView *errorAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
-                errorAlert.image = [UIImage imageNamed:@"symbol-error.png"];
+                errorAlert.image = [UIImage imageNamed:@"fail.png"];
                 [statusView addSubview:errorAlert];
             }
                 break;
+            
 
             default:
                 break;
         }
-    }
+
 
     return [self initWithView:label date:date type:type insets:insets status:statusView];
 }

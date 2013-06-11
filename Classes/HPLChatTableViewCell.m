@@ -59,7 +59,8 @@
 - (void) setupInternalData
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+
+//    if (!self.chatImage)
     if (self.showBubble && !self.chatImage)
     {
 #if !__has_feature(objc_arc)
