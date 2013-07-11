@@ -25,7 +25,6 @@
 @synthesize chatSection = _chatSection;
 @synthesize typingChat = _typingChat;
 @synthesize showAvatars = _showAvatars;
-@synthesize showBubbles = _showBubbles;
 
 #pragma mark - Initializators
 
@@ -244,8 +243,7 @@
     
     cell.data = data;
     cell.showAvatar = self.showAvatars;
-    cell.showBubble = self.showBubbles;
-    
+
     return cell;
 }
 

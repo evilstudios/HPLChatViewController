@@ -14,7 +14,7 @@
 @interface HPLChatTableViewCell ()
 
 @property (nonatomic, retain) UIView *customView;
-@property (nonatomic, retain) UIImageView *chatImage;
+@property (nonatomic, retain) UIView *bubbleView;
 @property (nonatomic, retain) UIImageView *avatarImage;
 @property (nonatomic, retain) UIView *statusImage;
 
@@ -26,7 +26,7 @@
 
 @synthesize data = _data;
 @synthesize customView = _customView;
-@synthesize chatImage = _chatImage;
+@synthesize bubbleView = _bubbleView;
 @synthesize showAvatar = _showAvatar;
 @synthesize avatarImage = _avatarImage;
 @synthesize showBubble = _showBubble;
@@ -44,7 +44,7 @@
 {
     self.data = nil;
     self.customView = nil;
-    self.chatImage = nil;
+    self.bubbleView = nil;
     self.avatarImage = nil;
     [super dealloc];
 }
@@ -60,17 +60,15 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 
-//    if (!self.chatImage)
-    if (self.showBubble && !self.chatImage)
-    {
+    if(!self.bubbleView) {
 #if !__has_feature(objc_arc)
-        self.chatImage = [[[UIImageView alloc] init] autorelease];
+        self.bubbleView = [[[UIImageView alloc] init] autorelease];
 #else
-        self.chatImage = [[UIImageView alloc] init];        
+        self.bubbleView = [[UIImageView alloc] init];
 #endif
-        [self addSubview:self.chatImage];
+        [self addSubview:self.bubbleView];
     }
-    
+
     HPLChatType type = self.data.type;
     
     CGFloat width = self.data.view.frame.size.width;
@@ -88,15 +86,11 @@
 #else
         self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
 #endif
-        self.avatarImage.layer.cornerRadius = 9.0;
-        self.avatarImage.layer.masksToBounds = YES;
-        self.avatarImage.layer.borderColor = [UIColor colorWithWhite:0.0 alpha:0.2].CGColor;
-        self.avatarImage.layer.borderWidth = 1.0;
         
-        CGFloat avatarX = (type == ChatTypeSomeoneElse) ? 2 : self.frame.size.width - 52;
-        CGFloat avatarY = self.frame.size.height - 50;
+        CGFloat avatarX = (type == ChatTypeSomeoneElse) ? 2 : self.frame.size.width - 45;
+        CGFloat avatarY = self.frame.size.height - 35;
         
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 50, 50);
+        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 35, 35);
         [self addSubview:self.avatarImage];
         
         CGFloat delta = self.frame.size.height - (self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height);
@@ -116,18 +110,18 @@
     self.statusImage.frame = CGRectMake(self.customView.frame.origin.x - 30.0f, self.customView.frame.origin.y, 20.0f, 20.0f);
     [self.contentView addSubview:self.statusImage];
 
-    if (self.showBubble) {
-        if (type == ChatTypeSomeoneElse)
-        {
-            self.chatImage.image = [[UIImage imageNamed:@"chatSomeone.png"] stretchableImageWithLeftCapWidth:21 topCapHeight:14];
+    self.bubbleView.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
 
-        }
-        else {
-            self.chatImage.image = [[UIImage imageNamed:@"chatMine.png"] stretchableImageWithLeftCapWidth:15 topCapHeight:14];
-        }
+    self.bubbleView.backgroundColor = [UIColor whiteColor];
 
-        self.chatImage.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
-    }
+    CALayer *bottomBorder = [CALayer layer];
+
+    bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
+
+    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                     alpha:1.0f].CGColor;
+
+    [self.bubbleView.layer addSublayer:bottomBorder];
 
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.5];

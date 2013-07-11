@@ -25,7 +25,6 @@ typedef enum _HPLChatTypingType
 @property (nonatomic) NSTimeInterval snapInterval;
 @property (nonatomic) HPLChatTypingType typingChat;
 @property (nonatomic) BOOL showAvatars;
-@property (nonatomic) BOOL showBubbles;
 @property (nonatomic) BOOL scrollOnActivity;
 
 -(void)scrollToBottomAnimated:(BOOL)animated;

@@ -14,6 +14,5 @@
 
 @property (nonatomic, strong) HPLChatData *data;
 @property (nonatomic) BOOL showAvatar;
-@property (nonatomic) BOOL showBubble;
 
 @end
