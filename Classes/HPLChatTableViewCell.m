@@ -29,7 +29,6 @@
 @synthesize bubbleView = _bubbleView;
 @synthesize showAvatar = _showAvatar;
 @synthesize avatarImage = _avatarImage;
-@synthesize showBubble = _showBubble;
 @synthesize statusImage = _statusImage;
 
 
