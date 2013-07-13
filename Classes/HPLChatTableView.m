@@ -73,16 +73,6 @@
     return self;
 }
 
-#if !__has_feature(objc_arc)
-- (void)dealloc
-{
-    [_chatSection release];
-	_chatSection = nil;
-	_chatDataSource = nil;
-    [super dealloc];
-}
-#endif
-
 #pragma mark - Override
 
 - (void)reloadData
@@ -95,19 +85,11 @@
     
     // Loading new data
     int count = 0;
-#if !__has_feature(objc_arc)
-    self.chatSection = [[[NSMutableArray alloc] init] autorelease];
-#else
     self.chatSection = [[NSMutableArray alloc] init];
-#endif
     
     if (self.chatDataSource && (count = [self.chatDataSource numberOfRowsForChatTable:self]) > 0)
     {
-#if !__has_feature(objc_arc)
-        NSMutableArray *chatData = [[[NSMutableArray alloc] initWithCapacity:count] autorelease];
-#else
         NSMutableArray *chatData = [[NSMutableArray alloc] initWithCapacity:count];
-#endif
         
         for (int i = 0; i < count; i++)
         {
@@ -133,11 +115,7 @@
             
             if ([data.date timeIntervalSinceDate:last] > self.snapInterval)
             {
-#if !__has_feature(objc_arc)
-                currentSection = [[[NSMutableArray alloc] init] autorelease];
-#else
                 currentSection = [[NSMutableArray alloc] init];
-#endif
                 [self.chatSection addObject:currentSection];
             }
             

@@ -10,36 +10,22 @@
 #import "HPLChatData.h"
 #import <QuartzCore/QuartzCore.h>
 
+@interface HPLChatData ()
+
+// Private Properties
+@property (readwrite, nonatomic, strong) NSDate *date;
+@property (readwrite, nonatomic) HPLChatType type;
+@property (readwrite, nonatomic, strong) UIView *view;
+@property (readwrite, nonatomic) UIEdgeInsets insets;
+@property (readwrite, nonatomic, strong) UIView *statusView;
+@property (readwrite, nonatomic) HPLChatMessageStatus messageStatus;
+@end
+
+
+
 @implementation HPLChatData
 
-#pragma mark - Properties
-
-@synthesize date = _date;
-@synthesize type = _type;
-@synthesize view = _view;
-@synthesize insets = _insets;
-@synthesize avatar = _avatar;
-@synthesize statusView = _statusView;
-@synthesize bubbleView = _bubbleView;
-
 #pragma mark - Lifecycle
-
-#if !__has_feature(objc_arc)
-- (void)dealloc
-{
-    [_date release];
-	_date = nil;
-    [_view release];
-    _view = nil;
-    
-    self.avatar = nil;
-    
-    [_bubbleView release];
-    _bubbleView = nil;
-
-    [super dealloc];
-}
-#endif
 
 #pragma mark - Text chat
 
@@ -48,11 +34,7 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
 
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type
 {
-#if !__has_feature(objc_arc)
-    return [[[HPLChatData alloc] initWithText:text date:date type:type] autorelease];
-#else
     return [[HPLChatData alloc] initWithText:text date:date type:type];
-#endif    
 }
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type
@@ -66,13 +48,27 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
     label.text = (text ? text : @"");
     label.font = font;
     label.backgroundColor = [UIColor clearColor];
-    
-#if !__has_feature(objc_arc)
-    [label autorelease];
-#endif
-    
+        
     UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
     return [self initWithView:label date:date type:type insets:insets];
+}
+
+#pragma mark - Public
+
+- (void)setAvatar:(UIImage *)avatarImage
+{
+    if ( avatarImage ) {
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:avatarImage];
+        self.avatarView = imageView;
+    } else {
+        self.avatarView = nil;
+    }
+}
+
+- (UIImage *)avatar {
+    if ( [self.avatarView isKindOfClass:[UIImageView class]]) {
+        return [(UIImageView *)self.avatarView image];
+    }
 }
 
 #pragma mark - Image chat
@@ -82,11 +78,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
 
 + (id)dataWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type
 {
-#if !__has_feature(objc_arc)
-    return [[[HPLChatData alloc] initWithImage:image date:date type:type] autorelease];
-#else
     return [[HPLChatData alloc] initWithImage:image date:date type:type];
-#endif    
 }
 
 - (id)initWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type
@@ -102,12 +94,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     imageView.image = image;
     imageView.layer.cornerRadius = 5.0;
     imageView.layer.masksToBounds = YES;
-
-    
-#if !__has_feature(objc_arc)
-    [imageView autorelease];
-#endif
-    
+        
     UIEdgeInsets insets = (type == ChatTypeMine ? imageInsetsMine : imageInsetsSomeone);
     return [self initWithView:imageView date:date type:type insets:insets];       
 }
@@ -116,11 +103,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
 
 + (id)dataWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets
 {
-#if !__has_feature(objc_arc)
-    return [[[HPLChatData alloc] initWithView:view date:date type:type insets:insets] autorelease];
-#else
     return [[HPLChatData alloc] initWithView:view date:date type:type insets:insets];
-#endif    
 }
 
 - (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets  
@@ -128,15 +111,10 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     self = [super init];
     if (self)
     {
-#if !__has_feature(objc_arc)
-        _view = [view retain];
-        _date = [date retain];
-#else
-        _view = view;
-        _date = date;
-#endif
-        _type = type;
-        _insets = insets;
+        self.view = view;
+        self.date = date;
+        self.type = type;
+        self.insets = insets;
     }
     return self;
 }
@@ -152,10 +130,6 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     label.text = (text ? text : @"");
     label.font = font;
     label.backgroundColor = [UIColor clearColor];
-
-#if !__has_feature(objc_arc)
-    [label autorelease];
-#endif
 
     UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
 
@@ -190,11 +164,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
 }
 
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
-#if !__has_feature(objc_arc)
-    return [[[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus] autorelease];
-#else
-    return [[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus]
-#endif
+    return [[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus];
 }
 
 - (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatData*)type insets:(UIEdgeInsets)insets status:(UIView *)statusView
@@ -202,21 +172,13 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     self = [super init];
     if (self)
     {
-#if !__has_feature(objc_arc)
-        _view = [view retain];
-        _date = [date retain];
-        _statusView = [statusView retain];
-#else
-        _view = view;
-        _date = date;
-        _statusView = statusView;
-#endif
-        _type = type;
-        _insets = insets;
+        self.view = view;
+        self.date = date;
+        self.statusView = statusView;
+        self.type = type;
+        self.insets = insets;
     }
     return self;
 }
-
-
 
 @end

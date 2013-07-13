@@ -15,7 +15,7 @@
 
 @property (nonatomic, retain) UIView *customView;
 @property (nonatomic, retain) UIView *bubbleView;
-@property (nonatomic, retain) UIImageView *avatarImage;
+@property (nonatomic, retain) UIView *avatarView;
 @property (nonatomic, retain) UIView *statusImage;
 
 - (void) setupInternalData;
@@ -28,7 +28,7 @@
 @synthesize customView = _customView;
 @synthesize bubbleView = _bubbleView;
 @synthesize showAvatar = _showAvatar;
-@synthesize avatarImage = _avatarImage;
+@synthesize avatarView = _avatarView;
 @synthesize statusImage = _statusImage;
 
 
@@ -37,17 +37,6 @@
     [super setFrame:frame];
 	[self setupInternalData];
 }
-
-#if !__has_feature(objc_arc)
-- (void) dealloc
-{
-    self.data = nil;
-    self.customView = nil;
-    self.bubbleView = nil;
-    self.avatarImage = nil;
-    [super dealloc];
-}
-#endif
 
 - (void)setData:(HPLChatData *)data
 {
@@ -74,11 +63,7 @@
             self.bubbleView = self.data.bubbleView;
         } else {
             
-#if !__has_feature(objc_arc)
-            self.bubbleView = [[[UIImageView alloc] init] autorelease];
-#else
             self.bubbleView = [[UIImageView alloc] init];
-#endif
             self.bubbleView.backgroundColor = [UIColor whiteColor];
             CALayer *bottomBorder = [CALayer layer];
             bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
@@ -100,18 +85,20 @@
     // Adjusting the x coordinate for avatar
     if (self.showAvatar)
     {
-        [self.avatarImage removeFromSuperview];
-#if !__has_feature(objc_arc)
-        self.avatarImage = [[[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])] autorelease];
-#else
-        self.avatarImage = [[UIImageView alloc] initWithImage:(self.data.avatar ? self.data.avatar : [UIImage imageNamed:@"missingAvatar.png"])];
-#endif
+        [self.avatarView removeFromSuperview];
         
+        if ( self.data.avatarView == nil ) {
+            self.avatarView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"missingAvatar.png"]];
+        } else {
+            self.avatarView = self.data.avatarView;
+        }
+        
+        // TODO: How do we want to handle avatars that are not 35x35?
         CGFloat avatarX = (type == ChatTypeSomeoneElse) ? 2 : self.frame.size.width - 45;
         CGFloat avatarY = self.frame.size.height - 35;
         
-        self.avatarImage.frame = CGRectMake(avatarX, avatarY, 35, 35);
-        [self addSubview:self.avatarImage];
+        self.avatarView.frame = CGRectMake(avatarX, avatarY, 35, 35);
+        [self addSubview:self.avatarView];
         
         CGFloat delta = self.frame.size.height - (self.data.insets.top + self.data.insets.bottom + self.data.view.frame.size.height);
         if (delta > 0) y = delta;
