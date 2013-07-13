@@ -49,22 +49,43 @@
 }
 #endif
 
+- (void)setData:(HPLChatData *)data
+{
+    _data = data;
+    if ( data.bubbleView ) {
+        // unset current bubbleview so that setupInternalData will use the bubbleView from data. Otherwise an old bubbleView may be cached.
+        self.bubbleView = nil;
+    }
+    [self setupInternalData];
+}
+
 - (void)setDataInternal:(HPLChatData *)value
 {
 	self.data = value;
-	[self setupInternalData];
 }
 
 - (void) setupInternalData
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-
+    
     if(!self.bubbleView) {
+        
+        if ( self.data.bubbleView ) {
+            self.bubbleView = self.data.bubbleView;
+        } else {
+            
 #if !__has_feature(objc_arc)
-        self.bubbleView = [[[UIImageView alloc] init] autorelease];
+            self.bubbleView = [[[UIImageView alloc] init] autorelease];
 #else
-        self.bubbleView = [[UIImageView alloc] init];
+            self.bubbleView = [[UIImageView alloc] init];
 #endif
+            self.bubbleView.backgroundColor = [UIColor whiteColor];
+            CALayer *bottomBorder = [CALayer layer];
+            bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
+            bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                             alpha:1.0f].CGColor;
+            [self.bubbleView.layer addSublayer:bottomBorder];
+        }
         [self addSubview:self.bubbleView];
     }
 
@@ -110,17 +131,7 @@
     [self.contentView addSubview:self.statusImage];
 
     self.bubbleView.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
-
-    self.bubbleView.backgroundColor = [UIColor whiteColor];
-
-    CALayer *bottomBorder = [CALayer layer];
-
-    bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
-
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                     alpha:1.0f].CGColor;
-
-    [self.bubbleView.layer addSublayer:bottomBorder];
+    [self sendSubviewToBack:self.bubbleView];   // make sure it goes behind the text
 
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.5];
