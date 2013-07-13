@@ -20,6 +20,7 @@
 @synthesize insets = _insets;
 @synthesize avatar = _avatar;
 @synthesize statusView = _statusView;
+@synthesize bubbleView = _bubbleView;
 
 #pragma mark - Lifecycle
 
@@ -32,6 +33,9 @@
     _view = nil;
     
     self.avatar = nil;
+    
+    [_bubbleView release];
+    _bubbleView = nil;
 
     [super dealloc];
 }

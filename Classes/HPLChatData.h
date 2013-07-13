@@ -30,6 +30,12 @@ typedef enum _HPLChatMessageStatus {
 @property (readonly, nonatomic, strong) UIView *statusView;
 @property (readonly, nonatomic) HPLChatMessageStatus messageStatus;
 
+/**
+ Set a custom bubble view if you don't want to use the default bubble view style.
+ If nil, default style used.
+ */
+@property (readwrite, nonatomic, strong) UIView *bubbleView;
+
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
 - (id)initWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type;
