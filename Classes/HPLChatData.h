@@ -22,13 +22,20 @@ typedef enum _HPLChatMessageStatus {
 
 @interface HPLChatData : NSObject
 
+/**
+ Read-only properties.
+ */
 @property (readonly, nonatomic, strong) NSDate *date;
-@property (readonly, nonatomic) HPLChatType type;
 @property (readonly, nonatomic, strong) UIView *view;
-@property (readonly, nonatomic) UIEdgeInsets insets;
-@property (nonatomic, strong) UIImage *avatar;
 @property (readonly, nonatomic, strong) UIView *statusView;
+@property (readonly, nonatomic) UIEdgeInsets insets;
+@property (readonly, nonatomic) HPLChatType type;
 @property (readonly, nonatomic) HPLChatMessageStatus messageStatus;
+
+/**
+ Set a custom avatar view. If nil then the default Not-Found image is used for avatar.
+ */
+@property (readwrite, nonatomic, strong) UIView *avatarView;
 
 /**
  Set a custom bubble view if you don't want to use the default bubble view style.
@@ -36,6 +43,9 @@ typedef enum _HPLChatMessageStatus {
  */
 @property (readwrite, nonatomic, strong) UIView *bubbleView;
 
+/**
+ Initalizers
+ */
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
 - (id)initWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type;
