@@ -37,11 +37,18 @@ typedef enum _HPLChatMessageStatus {
  */
 @property (readwrite, nonatomic, strong) UIView *avatarView;
 
+
 /**
  Set a custom bubble view if you don't want to use the default bubble view style.
  If nil, default style used.
  */
 @property (readwrite, nonatomic, strong) UIView *bubbleView;
+
+/**
+ We depricated the avatar property in exchange for the avatarView property.
+ This method will simply set the avatarView property to a UIImageView with the provided UIImage.
+ */
+@property (nonatomic, readwrite, strong) UIImage *avatar DEPRECATED_ATTRIBUTE;
 
 /**
  Initalizers

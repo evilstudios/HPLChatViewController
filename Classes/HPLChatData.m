@@ -53,6 +53,24 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
     return [self initWithView:label date:date type:type insets:insets];
 }
 
+#pragma mark - Public
+
+- (void)setAvatar:(UIImage *)avatarImage
+{
+    if ( avatarImage ) {
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:avatarImage];
+        self.avatarView = imageView;
+    } else {
+        self.avatarView = nil;
+    }
+}
+
+- (UIImage *)avatar {
+    if ( [self.avatarView isKindOfClass:[UIImageView class]]) {
+        return [(UIImageView *)self.avatarView image];
+    }
+}
+
 #pragma mark - Image chat
 
 const UIEdgeInsets imageInsetsMine = {11, 13, 16, 22};
