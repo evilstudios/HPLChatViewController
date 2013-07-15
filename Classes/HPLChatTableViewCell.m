@@ -56,24 +56,6 @@
 - (void) setupInternalData
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    if(!self.bubbleView) {
-        
-        if ( self.data.bubbleView ) {
-            self.bubbleView = self.data.bubbleView;
-        } else {
-            
-            self.bubbleView = [[UIImageView alloc] init];
-            self.bubbleView.backgroundColor = [UIColor whiteColor];
-            CALayer *bottomBorder = [CALayer layer];
-            bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
-            bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                             alpha:1.0f].CGColor;
-            [self.bubbleView.layer addSublayer:bottomBorder];
-        }
-        [self addSubview:self.bubbleView];
-    }
-
     HPLChatType type = self.data.type;
     
     CGFloat width = self.data.view.frame.size.width;
@@ -81,6 +63,17 @@
 
     CGFloat x = (type == ChatTypeSomeoneElse) ? 0 : self.frame.size.width - width - self.data.insets.left - self.data.insets.right;
     CGFloat y = 0;
+
+    if(!self.bubbleView) {
+
+        if ( self.data.bubbleView ) {
+            self.bubbleView = self.data.bubbleView;
+        } else {
+            self.bubbleView = [[UIView alloc] init];
+            self.bubbleView.backgroundColor = [UIColor whiteColor];
+        }
+        [self addSubview:self.bubbleView];
+    }
     
     // Adjusting the x coordinate for avatar
     if (self.showAvatar)
@@ -114,16 +107,26 @@
 
     [self.statusImage removeFromSuperview];
     self.statusImage = self.data.statusView;
-    self.statusImage.frame = CGRectMake(self.customView.frame.origin.x - 30.0f, self.customView.frame.origin.y, 20.0f, 20.0f);
+    self.statusImage.frame = CGRectMake(self.customView.frame.origin.x - 35.0f, self.customView.frame.origin.y, 20.0f, 20.0f);
     [self.contentView addSubview:self.statusImage];
 
     self.bubbleView.frame = CGRectMake(x, y, width + self.data.insets.left + self.data.insets.right, height + self.data.insets.top + self.data.insets.bottom);
     [self sendSubviewToBack:self.bubbleView];   // make sure it goes behind the text
 
+
+    if ( !self.data.bubbleView ) {
+        // custom styling for the default bubble view.
+        // has to be applied after the bubbleview frame is calculated
+        CALayer *bottomBorder = [CALayer layer];
+        bottomBorder.frame = CGRectMake(0.0f, self.bubbleView.frame.size.height-1, self.bubbleView.frame.size.width, 1.0f);
+
+        bottomBorder.backgroundColor = [UIColor colorWithRed:0. green:0. blue:0. alpha:0.05].CGColor;
+        [self.bubbleView.layer addSublayer:bottomBorder];
+    }
+
     UILongPressGestureRecognizer *recognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     [recognizer setMinimumPressDuration:0.5];
     [self addGestureRecognizer:recognizer];
-    [recognizer release];
 }
 
 - (BOOL) canBecomeFirstResponder {

@@ -129,7 +129,7 @@
             } else {
                 NSLog(@"bottom");
                 NSString *lastText = [lastData getText];
-                NSString *newText = [NSString stringWithFormat:@"%@\n%@", lastText, [data getText]];
+                NSString *newText = [NSString stringWithFormat:@"%@\n\n%@", lastText, [data getText]];
                 NSLog(@"new text - %@", newText);
                 [lastData setText:newText];
             }
@@ -230,8 +230,6 @@
     static NSString *cellId = @"tblChatCell";
     HPLChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     HPLChatData *data = [[self.chatSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
-
-    NSLog(@"cell for row text %@", [data getText]);
     
     if (cell == nil) cell = [[HPLChatTableViewCell alloc] init];
     

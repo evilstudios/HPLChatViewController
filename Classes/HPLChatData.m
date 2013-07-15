@@ -167,7 +167,7 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     return [[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus];
 }
 
-- (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatData*)type insets:(UIEdgeInsets)insets status:(UIView *)statusView
+- (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets status:(UIView *)statusView
 {
     self = [super init];
     if (self)
@@ -186,13 +186,9 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
     CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
+    UILabel *label = (UILabel*) self.view;
+    label.frame = CGRectMake(0, 0, size.width, size.height);
     label.text = (text ? text : @"");
-    label.font = font;
-    label.backgroundColor = [UIColor clearColor];
-    self.view = label;
 }
 
 - (NSString*) getText {
