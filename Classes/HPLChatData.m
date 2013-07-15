@@ -71,6 +71,26 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
     }
 }
 
+- (void) setText:(NSString*)text {
+    
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.text = (text ? text : @"");
+    label.font = font;
+    label.backgroundColor = [UIColor clearColor];
+    self.view = label;
+}
+
+- (NSString*) text {
+    NSCAssert([self.view isKindOfClass:[UILabel class]], @"Invalid class.");
+    UILabel *label = (UILabel *) self.view;
+    return label.text;
+}
+
 #pragma mark - Image chat
 
 const UIEdgeInsets imageInsetsMine = {11, 13, 16, 22};
@@ -179,25 +199,6 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
         self.insets = insets;
     }
     return self;
-}
-
-- (void) setText:(NSString*)text {
-
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = (text ? text : @"");
-    label.font = font;
-    label.backgroundColor = [UIColor clearColor];
-    self.view = label;
-}
-
-- (NSString*) getText {
-    UILabel *label = (UILabel *) self.view;
-    return label.text;
 }
 
 @end
