@@ -137,8 +137,7 @@
                 [currentSection addObject:data];
                 lastData = data;
             } else {
-                NSString *lastText = [lastData getText];
-                NSString *newText = [NSString stringWithFormat:@"%@\n\n%@", lastText, [data getText]];
+                NSString *newText = [NSString stringWithFormat:@"%@\n\n%@", lastData.text, data.text];
                 lastData.text = newText;
             }
 
