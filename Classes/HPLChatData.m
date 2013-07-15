@@ -122,11 +122,11 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
     UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:UILineBreakModeWordWrap];
+    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     label.numberOfLines = 0;
-    label.lineBreakMode = UILineBreakModeWordWrap;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
     label.text = (text ? text : @"");
     label.font = font;
     label.backgroundColor = [UIColor clearColor];
@@ -179,6 +179,25 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
         self.insets = insets;
     }
     return self;
+}
+
+- (void) setText:(NSString*)text {
+
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.text = (text ? text : @"");
+    label.font = font;
+    label.backgroundColor = [UIColor clearColor];
+    self.view = label;
+}
+
+- (NSString*) getText {
+    UILabel *label = (UILabel *) self.view;
+    return label.text;
 }
 
 @end

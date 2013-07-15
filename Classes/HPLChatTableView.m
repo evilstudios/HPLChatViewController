@@ -22,6 +22,7 @@
 
 @synthesize chatDataSource = _chatDataSource;
 @synthesize snapInterval = _snapInterval;
+@synthesize groupInterval = _groupInterval;
 @synthesize chatSection = _chatSection;
 @synthesize typingChat = _typingChat;
 @synthesize showAvatars = _showAvatars;
@@ -42,6 +43,7 @@
     // HPLChatTableView default properties
     
     self.snapInterval = 120;
+    self.groupInterval = 2.0;
     self.typingChat = HPLChatTypingTypeNobody;
 }
 
@@ -108,6 +110,7 @@
         
         NSDate *last = [NSDate dateWithTimeIntervalSince1970:0];
         NSMutableArray *currentSection = nil;
+        HPLChatData *lastData = nil;
         
         for (int i = 0; i < count; i++)
         {
@@ -118,8 +121,19 @@
                 currentSection = [[NSMutableArray alloc] init];
                 [self.chatSection addObject:currentSection];
             }
-            
-            [currentSection addObject:data];
+
+            if([data.date timeIntervalSinceDate:last] > self.groupInterval || !lastData || data.messageStatus != lastData.messageStatus || data.type != lastData.type) {
+                NSLog(@"top");
+                [currentSection addObject:data];
+                lastData = data;
+            } else {
+                NSLog(@"bottom");
+                NSString *lastText = [lastData getText];
+                NSString *newText = [NSString stringWithFormat:@"%@\n%@", lastText, [data getText]];
+                NSLog(@"new text - %@", newText);
+                [lastData setText:newText];
+            }
+
             last = data.date;
         }
     }
@@ -179,7 +193,7 @@
     }
     
     HPLChatData *data = [[self.chatSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
-    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom, self.showAvatars ? 52 : 0);
+    return MAX(data.insets.top + data.view.frame.size.height + data.insets.bottom + 10, self.showAvatars ? 52 : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -216,6 +230,8 @@
     static NSString *cellId = @"tblChatCell";
     HPLChatTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     HPLChatData *data = [[self.chatSection objectAtIndex:indexPath.section] objectAtIndex:indexPath.row - 1];
+
+    NSLog(@"cell for row text %@", [data getText]);
     
     if (cell == nil) cell = [[HPLChatTableViewCell alloc] init];
     

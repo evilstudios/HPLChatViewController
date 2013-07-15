@@ -62,4 +62,11 @@ typedef enum _HPLChatMessageStatus {
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
 
+
+/**
+ Helper methods
+ */
+- (void) setText:(NSString*)t;
+- (NSString*) getText;
+
 @end

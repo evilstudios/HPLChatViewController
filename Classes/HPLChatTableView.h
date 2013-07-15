@@ -23,6 +23,7 @@ typedef enum _HPLChatTypingType
 
 @property (nonatomic, assign) IBOutlet id<HPLChatTableViewDataSource> chatDataSource;
 @property (nonatomic) NSTimeInterval snapInterval;
+@property (nonatomic) NSTimeInterval groupInterval;
 @property (nonatomic) HPLChatTypingType typingChat;
 @property (nonatomic) BOOL showAvatars;
 @property (nonatomic) BOOL scrollOnActivity;
