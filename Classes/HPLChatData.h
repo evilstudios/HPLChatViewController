@@ -51,6 +51,11 @@ typedef enum _HPLChatMessageStatus {
 @property (nonatomic, readwrite, strong) UIImage *avatar DEPRECATED_ATTRIBUTE;
 
 /**
+ Getter & Setter for accessing the text of the ChatData.
+ */
+@property (nonatomic, readwrite, strong) NSString *text;
+
+/**
  Initalizers
  */
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
@@ -61,12 +66,5 @@ typedef enum _HPLChatMessageStatus {
 + (id)dataWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets;
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
 + (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
-
-
-/**
- Helper methods
- */
-- (void) setText:(NSString*)t;
-- (NSString*) getText;
 
 @end

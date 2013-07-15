@@ -50,28 +50,39 @@
 - (id)init
 {
     self = [super init];
-    if (self) [self initializator];
+    if (self) {
+        [self initializator];
+    }
     return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
-    if (self) [self initializator];
+    if (self)
+    {
+        [self initializator];
+    }
     return self;
 }
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) [self initializator];
+    if (self)
+    {
+        [self initializator];
+    }
     return self;
 }
 
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style
 {
     self = [super initWithFrame:frame style:UITableViewStylePlain];
-    if (self) [self initializator];
+    if (self)
+    {
+        [self initializator];
+    }
     return self;
 }
 
@@ -123,15 +134,12 @@
             }
 
             if([data.date timeIntervalSinceDate:last] > self.groupInterval || !lastData || data.messageStatus != lastData.messageStatus || data.type != lastData.type) {
-                NSLog(@"top");
                 [currentSection addObject:data];
                 lastData = data;
             } else {
-                NSLog(@"bottom");
                 NSString *lastText = [lastData getText];
                 NSString *newText = [NSString stringWithFormat:@"%@\n\n%@", lastText, [data getText]];
-                NSLog(@"new text - %@", newText);
-                [lastData setText:newText];
+                lastData.text = newText;
             }
 
             last = data.date;
