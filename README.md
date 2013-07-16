@@ -23,6 +23,7 @@ TODO: Improve this Section
 The project was created by [Alex Barinov](https://github.com/AlexBarinov/), maintained by
 
 * [Matthew Conlen](http://www.github.com/mathisonian) mc@mathisonian.com
+* [Danny Ricciotti](http://www.github.com/objectiveSee) [@topwobble on twitter](http://www.twitter.com/topwobble)
 
 ## License
 

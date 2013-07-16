@@ -18,7 +18,6 @@
 @property (readwrite, nonatomic, strong) UIView *view;
 @property (readwrite, nonatomic) UIEdgeInsets insets;
 @property (readwrite, nonatomic, strong) UIView *statusView;
-@property (readwrite, nonatomic) HPLChatMessageStatus messageStatus;
 @end
 
 
@@ -39,16 +38,7 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
 
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type
 {
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = (text ? text : @"");
-    label.font = font;
-    label.backgroundColor = [UIColor clearColor];
-        
+    UILabel * label = [HPLChatData labelForText:text];
     UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
     return [self initWithView:label date:date type:type insets:insets];
 }
@@ -69,15 +59,63 @@ const UIEdgeInsets textInsetsSomeone = {5, 15, 11, 10};
     if ( [self.avatarView isKindOfClass:[UIImageView class]]) {
         return [(UIImageView *)self.avatarView image];
     }
+    return nil;
+}
+
+- (void)setMessageStatus:(HPLChatMessageStatus)messageStatus withView:(UIView*)statusView
+{
+    _messageStatus = messageStatus;
+    _statusView = statusView;
+}
+
+- (void)setMessageStatus:(HPLChatMessageStatus)messageStatus
+{
+    UIView *statusView;
+    
+    statusView = [[UIView alloc] initWithFrame:CGRectZero];
+    statusView.backgroundColor = [UIColor clearColor];
+    
+    switch (messageStatus) {
+        case ChatStatusSending: {
+            UIActivityIndicatorView *msgSendingStatus = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            msgSendingStatus.frame = CGRectMake(1.0f, 1.0f, 18.0f, 18.0f);
+            [msgSendingStatus startAnimating];
+            [statusView addSubview:msgSendingStatus];
+        }
+            break;
+            
+        case ChatStatusFailed: {
+            UIImageView *errorAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
+            errorAlert.image = [UIImage imageNamed:@"chat_message_not_delivered.png"];
+            [statusView addSubview:errorAlert];
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self setMessageStatus:messageStatus withView:statusView];
+}
+
++ (UILabel*)labelForText:(NSString *)text
+{
+    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
+    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.text = (text ? text : @"");
+    label.font = font;
+    label.backgroundColor = [UIColor clearColor];
+    
+    return label;
 }
 
 - (void) setText:(NSString*)text {
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-
-    UILabel *label = (UILabel*) self.view;
-    label.frame = CGRectMake(0, 0, size.width, size.height);
-    label.text = (text ? text : @"");
+    _view = [HPLChatData labelForText:text];
+    _insets = (_type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
 }
 
 - (NSString*) text {
@@ -128,68 +166,6 @@ const UIEdgeInsets imageInsetsSomeone = {11, 18, 16, 14};
     {
         self.view = view;
         self.date = date;
-        self.type = type;
-        self.insets = insets;
-    }
-    return self;
-}
-
-
-- (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
-    UIFont *font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
-    CGSize size = [(text ? text : @"") sizeWithFont:font constrainedToSize:CGSizeMake(220, 9999) lineBreakMode:NSLineBreakByWordWrapping];
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
-    label.numberOfLines = 0;
-    label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.text = (text ? text : @"");
-    label.font = font;
-    label.backgroundColor = [UIColor clearColor];
-
-    UIEdgeInsets insets = (type == ChatTypeMine ? textInsetsMine : textInsetsSomeone);
-
-    UIView *statusView;
-
-        statusView = [[UIView alloc] initWithFrame:CGRectZero];
-        statusView.backgroundColor = [UIColor clearColor];
-
-        switch (messageStatus) {
-            case ChatStatusSending: {
-                UIActivityIndicatorView *msgSendingStatus = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-                msgSendingStatus.frame = CGRectMake(1.0f, 1.0f, 18.0f, 18.0f);
-                [msgSendingStatus startAnimating];
-                [statusView addSubview:msgSendingStatus];
-            }
-                break;
-
-            case ChatStatusFailed: {
-                UIImageView *errorAlert = [[UIImageView alloc] initWithFrame:CGRectMake(1.0f, 1.0f, 18.0f, 18.0f)];
-                errorAlert.image = [UIImage imageNamed:@"fail.png"];
-                [statusView addSubview:errorAlert];
-            }
-                break;
-            
-
-            default:
-                break;
-        }
-
-
-    return [self initWithView:label date:date type:type insets:insets status:statusView];
-}
-
-+ (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus {
-    return [[HPLChatData alloc] initWithText:text date:date type:type messageStatus:messageStatus];
-}
-
-- (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets status:(UIView *)statusView
-{
-    self = [super init];
-    if (self)
-    {
-        self.view = view;
-        self.date = date;
-        self.statusView = statusView;
         self.type = type;
         self.insets = insets;
     }
