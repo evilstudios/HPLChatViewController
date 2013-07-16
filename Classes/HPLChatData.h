@@ -30,7 +30,6 @@ typedef enum _HPLChatMessageStatus {
 @property (readonly, nonatomic, strong) UIView *statusView;
 @property (readonly, nonatomic) UIEdgeInsets insets;
 @property (readonly, nonatomic) HPLChatType type;
-@property (readonly, nonatomic) HPLChatMessageStatus messageStatus;
 
 /**
  Set a custom avatar view. If nil then the default Not-Found image is used for avatar.
@@ -56,6 +55,11 @@ typedef enum _HPLChatMessageStatus {
 @property (nonatomic, readwrite, strong) NSString *text;
 
 /**
+ Getter & Setter for the ChatData's delivery status
+ */
+@property (readwrite, nonatomic) HPLChatMessageStatus messageStatus;
+
+/**
  Initalizers
  */
 - (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type;
@@ -64,7 +68,6 @@ typedef enum _HPLChatMessageStatus {
 + (id)dataWithImage:(UIImage *)image date:(NSDate *)date type:(HPLChatType)type;
 - (id)initWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets;
 + (id)dataWithView:(UIView *)view date:(NSDate *)date type:(HPLChatType)type insets:(UIEdgeInsets)insets;
-- (id)initWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
-+ (id)dataWithText:(NSString *)text date:(NSDate *)date type:(HPLChatType)type messageStatus:(HPLChatMessageStatus)messageStatus;
+- (void)setMessageStatus:(HPLChatMessageStatus)messageStatus withView:(UIView*)statusView;
 
 @end
