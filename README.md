@@ -14,9 +14,38 @@ pod 'HPLChatViewController', '~> 0.0.3'
 
 ## Usage
 
-See http://alexbarinov.github.io/UIBubbleTableView/ for a detailed usage guide.
+You must implement a view controller that conforms to the `HPLChatTableViewDataSource` protocol. This requires implementing the following
+methods:
 
-TODO: Improve this Section
+``` objective-c
+- (NSInteger) numberOfRowsForChatTable:(HPLChatTableView *)tableView;
+- (HPLChatData *)chatTableView:(HPLChatTableView *)tableView dataForRow:(NSInteger)row;
+```
+
+## Customization
+
+The following properties are exposed on `HPLChatData` to allow for visual customization.
+
+```objective-c
+/**
+ Set a custom avatar view. If nil then the default Not-Found image is used for avatar.
+ */
+@property (readwrite, nonatomic, strong) UIView *avatarView;
+
+/**
+ Set a custom bubble view if you don't want to use the default bubble view style.
+ If nil, default style used.
+ */
+@property (readwrite, nonatomic, strong) UIView *bubbleView;
+
+
+/**
+ Set a status for a message with a custom view to be displayed
+ */
+- (void)setMessageStatus:(HPLChatMessageStatus)messageStatus withView:(UIView*)statusView;
+
+```
+
 
 ## Contributors
 
