@@ -19,6 +19,16 @@
 @synthesize label = _label;
 @synthesize date = _date;
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if ( self ) {
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
 + (CGFloat)height
 {
     return 28.0;

@@ -31,6 +31,16 @@
 @synthesize avatarView = _avatarView;
 @synthesize statusImage = _statusImage;
 
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if ( self ) {
+        self.contentView.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
+    }
+    return self;
+}
+
 
 - (void)setFrame:(CGRect)frame
 {
